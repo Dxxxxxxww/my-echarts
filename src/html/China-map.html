@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>中国地图</title>
+    <style>
+      html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      .China {
+        position: absolute;
+        top: 100px;
+        bottom: 100px;
+        left: 100px;
+        right: 100px;
+        background-color: blanchedalmond;
+      }
+    </style>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/china.js"></script>
+  </head>
+  <body>
+    <div id="China" class="China"></div>
+    <script>
+      const China = document.querySelector('#China')
+      const ChinaMap = echarts.init(China)
+      const options = {
+        title: {
+          text: '中国空气质量',
+          left: 'center'
+        },
+        geo: {
+          map: 'china',
+          // silent: true,
+          itemStyle: {
+            color: '#bc2f2e',
+            borderColor: '#ccc'
+          }
+        },
+        series: [
+          {
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: [
+              {
+                name: '上海',
+                value: [121.47, 31.23, 55]
+              },
+              {
+                name: '北京',
+                value: [116.4, 39.9, 110]
+              },
+              {
+                name: '重庆',
+                value: [106.55, 29.56, 32] // value的前两项是经纬度坐标，第三项为污染度数据
+              }
+            ],
+            color(params) {
+              let color = ''
+              const val = params.value
+              if (val[2] < 50) {
+                color = 'green'
+              } else if (val[2] >= 50 && val[2] < 100) {
+                color = 'yellow'
+              } else if (val[2] >= 100) {
+                color = 'red'
+              }
+              return color
+            }
+          }
+        ],
+        tooltip: {
+          enterable: true,
+          alwaysShowContent: true,
+          formatter(params) {
+            const val = params.value
+            const a =
+              '<br> <a href="http://www.baidu.com" style="color: red">查看详情</a>'
+            return params.name + ': ' + val[2] + a
+          }
+        }
+      }
+      ChinaMap.setOption(options)
+    </script>
+  </body>
+</html>
