@@ -32,38 +32,81 @@
     <script>
       const China = document.querySelector('#China')
       const ChinaMap = echarts.init(China)
+      const data = [
+        { name: '上海', value: [121.47, 31.23, 55] },
+        { name: '北京', value: [116.4, 39.9, 110] },
+        { name: '重庆', value: [106.55, 29.56, 32] }, // value的前两项是经纬度坐标，第三项为污染度数据},
+        { name: '武汉', value: [114.31, 30.52, 273] },
+        { name: '大庆', value: [125.03, 46.58, 279] },
+        { name: '德州', value: [116.29, 37.45, 120] },
+        { name: '济宁', value: [116.59, 35.38, 120] },
+        { name: '荆州', value: [112.239741, 30.335165, 127] },
+        { name: '温州', value: [120.65, 28.01, 95] },
+        { name: '杭州', value: [120.19, 30.26, 84] },
+        { name: '廊坊', value: [116.7, 39.53, 193] }
+      ]
+
       const options = {
         title: {
           text: '中国空气质量',
+          subtext: 'data from PM25.in',
           left: 'center'
         },
         geo: {
           map: 'china',
           // silent: true,
           itemStyle: {
-            color: '#bc2f2e',
-            borderColor: '#ccc'
+            normal: {
+              areaColor: '#323c48',
+              borderColor: '#ccc'
+            }
+          },
+          emphasis: {
+            label: {
+              color: '#ccc'
+            },
+            itemStyle: {
+              areaColor: '#2a333d'
+            }
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: 300,
+          splitNumber: 5,
+          color: ['#d94e5d', '#eac736', '#50a3ba'],
+          textStyle: {
+            color: '#333'
+          }
+        },
+        legend: {
+          orient: 'vertical',
+          top: 'bottom',
+          left: 'right',
+          data: ['pm2.5'],
+          textStyle: {
+            color: '#333'
+          }
+        },
+        tooltip: {
+          // enterable: true,
+          // alwaysShowContent: true,
+          formatter(params) {
+            const val = params.value
+            // const a =
+            //   '<br> <a href="http://www.baidu.com" style="color: red">查看详情</a>'
+            // return params.name + ': ' + val[2] + a
+            return params.name + ': ' + val[2]
           }
         },
         series: [
           {
-            type: 'effectScatter',
+            name: 'pm2.5',
+            type: 'scatter',
             coordinateSystem: 'geo',
-            data: [
-              {
-                name: '上海',
-                value: [121.47, 31.23, 55]
-              },
-              {
-                name: '北京',
-                value: [116.4, 39.9, 110]
-              },
-              {
-                name: '重庆',
-                value: [106.55, 29.56, 32] // value的前两项是经纬度坐标，第三项为污染度数据
-              }
-            ],
-            color(params) {
+            symbolSize: 12,
+            data
+            /* color(params) {
               let color = ''
               const val = params.value
               if (val[2] < 50) {
@@ -74,19 +117,9 @@
                 color = 'red'
               }
               return color
-            }
+            } */
           }
-        ],
-        tooltip: {
-          enterable: true,
-          alwaysShowContent: true,
-          formatter(params) {
-            const val = params.value
-            const a =
-              '<br> <a href="http://www.baidu.com" style="color: red">查看详情</a>'
-            return params.name + ': ' + val[2] + a
-          }
-        }
+        ]
       }
       ChinaMap.setOption(options)
     </script>
